@@ -1,0 +1,476 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "batch-processor",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "77525427-e299-4c90-bb28-8fe3494e3587",
+      "name": "Webhook (Process)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -448,
+        48
+      ],
+      "webhookId": "INSERT YOUR WEBHOOK ID"
+    },
+    {
+      "parameters": {
+        "options": {
+          "temperature": 0.4
+        }
+      },
+      "id": "913d6905-ef15-4e3d-bd8b-6b26183350ab",
+      "name": "Google Gemini",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        240,
+        256
+      ],
+      "credentials": {
+        "googlePalmApi": {
+          "id": "INSERT YOUR CREDENTIAL ID",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=={{ \"You are a Senior Investment Strategist and LinkedIn content writer at Lyn & Co Realty, a luxury Singapore real estate agency. You write exactly like the examples below.\\n\\nARTICLES:\\n\" + $json.rawText.join('\\n---NEXT ARTICLE---\\n') + \"\\n\\nEXAMPLE POST STYLE:\\n\\nBullish Outlook for District 10: Wing Tai & Metro Clinch Dunearn Road Site\\n\\nThe land tender results for the second Bukit Timah Turf City site are in, and the sentiment is clear: Confidence in the CCR remains rock-solid.\\n\\nWing Tai and Metro's joint venture secured the Dunearn Road site with a bullish bid of $1,625 psf ppr—marking a significant 15.3% jump from the adjacent site sold just last June ($1,410 psf ppr).\\n\\nKey Takeaways from the Tender:\\n- Tight Competition: With 7 major bidders in the fray, the top bid was only 3% higher than the runner-up.\\n- Supply Dynamics: New private home supply in CCR is projected to taper off by 30% this year.\\n- Future Pricing: Analysts are already estimating a potential launch price of above $3,300 psf.\\n\\nWhat This Means for You\\nFor those looking at Asset Progression, this tender result is a strong indicator of the floor price for future luxury builds in the area.\\n\\nThinking of navigating the Bukit Timah market? At Lyn & Co, we specialize in high-stakes asset progression and data-driven insights.\\n\\n📩 DM us for a curated analysis.\\n\\n#SingaporeProperty #LynAndCo #BukitTimah #AssetProgression\\n\\nFORMAT RULES:\\n1. Bold headline as first line (use ** for bold)\\n2. One short punchy opening paragraph — set the scene\\n3. One data paragraph with the key numbers\\n4. A section with 3-4 bullet points with a bold header like 'Key Takeaways:' or 'The Numbers at a Glance:'\\n5. A section with bold header like 'What This Means for You' or 'Lyn & Co Perspective' — strategic insight for HNW investors\\n6. End with a subtle CTA mentioning Lyn & Co\\n7. Add 📩 DM line\\n8. 6-8 relevant hashtags on final line starting with #LynAndCo\\n9. NO emojis except 📩 on the DM line\\n10. 200-280 words total\\n11. Write in confident, data-driven, insider tone — not salesy\\n\\nTASK: Generate one LinkedIn post per article following this exact style.\\n\\nOUTPUT FORMAT: Return a JSON array only, no other text.\\n[{ \\\"id\\\": 1, \\\"post\\\": \\\"...\\\" }, { \\\"id\\\": 2, \\\"post\\\": \\\"...\\\" }]\" }}",
+        "hasOutputParser": true
+      },
+      "id": "c111be86-199c-455e-ae4b-914dcd93e268",
+      "name": "AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.4,
+      "position": [
+        240,
+        48
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "=<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Lyn & Co Realty | Strategic AI Generator</title>\n    <style>\n        :root {\n            --primary: #0a192f;\n            --gold: #c5a059;\n            --gold-light: #e0c58a;\n            --bg: #f4f7f9;\n            --white: #ffffff;\n            --text: #1a202c;\n            --success: #28a745;\n        }\n        body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg); margin: 0; padding: 0; color: var(--text); }\n        header { background: var(--primary); color: var(--white); padding: 3rem 1rem; text-align: center; border-bottom: 5px solid var(--gold); }\n        .container { max-width: 900px; margin: -50px auto 50px; padding: 0 20px; }\n        \n        /* Main Upload Card */\n        .card { background: var(--white); border-radius: 16px; padding: 40px; box-shadow: 0 20px 40px rgba(0,0,0,0.08); border: 1px solid rgba(0,0,0,0.05); }\n        h1 { margin: 0; letter-spacing: 4px; text-transform: uppercase; font-size: 1.8rem; font-weight: 300; }\n        p.subtitle { color: var(--gold); font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase; margin-top: 10px; }\n        \n        .upload-area { border: 2px dashed #d1d5db; padding: 40px; text-align: center; border-radius: 12px; margin: 20px 0; transition: all 0.3s ease; background: #fafafa; cursor: pointer; }\n        .upload-area:hover { border-color: var(--gold); background: #fffdf9; }\n        \n        button { background: var(--primary); color: white; border: 1px solid var(--gold); padding: 16px 45px; border-radius: 4px; font-weight: 600; cursor: pointer; transition: 0.3s; font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase; }\n        button:hover { background: var(--gold); color: var(--primary); transform: translateY(-2px); }\n        button:disabled { background: #cbd5e0; border-color: #cbd5e0; cursor: not-allowed; transform: none; color: white; }\n        \n        .approve-btn { background: var(--success); border: none; width: 100%; margin-top: 20px; padding: 18px; border-radius: 8px; font-size: 1rem; }\n        .approve-btn:hover { background: #218838; color: white; }\n\n        /* Results Feed */\n        #results { margin-top: 50px; display: grid; gap: 40px; }\n        .post-card { background: white; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); overflow: hidden; transition: 0.3s; border: 1px solid #eee; }\n        .post-card.approved { opacity: 0.5; pointer-events: none; transform: scale(0.98); }\n        \n        .post-header { background: var(--primary); color: var(--gold); padding: 15px 25px; font-size: 0.8rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1.5px; display: flex; justify-content: space-between; }\n        .post-image { width: 100%; max-height: 400px; object-fit: contain; background: #000; display: block; border-bottom: 1px solid #eee; }\n        \n        /* Editable Content Area */\n        .post-body { padding: 30px; line-height: 1.8; font-size: 1.05rem; outline: none; }\n        .post-body:focus { background: #fffdf5; border-radius: 8px; }\n        .post-body p { margin-bottom: 15px; }\n        \n        .loader { display: none; text-align: center; padding: 30px; color: var(--primary); font-weight: 600; }\n        .file-chip { background: #edf2f7; padding: 8px 16px; border-radius: 6px; font-size: 0.85rem; color: var(--primary); border: 1px solid #e2e8f0; }\n    </style>\n</head>\n<body>\n    <header>\n        <h1>Lyn & Co Realty</h1>\n        <p class=\"subtitle\">Strategic Property Intelligence</p>\n    </header>\n    <div class=\"container\">\n        <div class=\"card\">\n            <div class=\"upload-area\" onclick=\"document.getElementById('fileInput').click()\">\n                <p style=\"margin:0 0 10px; font-size: 1.1rem;\">Click to Upload Articles</p>\n                <p style=\"margin:0; font-size: 0.85rem; color: #718096;\">Images will be processed into individual LinkedIn drafts.</p>\n                <input type=\"file\" id=\"fileInput\" multiple accept=\"image/*\" onchange=\"previewFiles()\" style=\"display:none\">\n            </div>\n            <div id=\"filePreview\" class=\"file-preview\" style=\"display:flex; gap:10px; flex-wrap:wrap; margin-bottom:15px;\"></div>\n            <div style=\"text-align:center;\">\n                <button id=\"btn\" onclick=\"process()\">Generate Luxury Insights</button>\n            </div>\n            <div id=\"loader\" class=\"loader\">⏳ ANALYZING MARKET DATA...</div>\n        </div>\n        <div id=\"results\"></div>\n    </div>\n\n    <script>\n    let uploadedFiles = [];\n    let generatedPosts = [];\n\n    // Helper function to convert a File object to a Base64 string\n    const toBase64 = file => new Promise((resolve, reject) => {\n        const reader = new FileReader();\n        reader.readAsDataURL(file);\n        reader.onload = () => resolve(reader.result);\n        reader.onerror = error => reject(error);\n    });\n\n    function previewFiles() {\n        const files = document.getElementById('fileInput').files;\n        uploadedFiles = Array.from(files);\n        const preview = document.getElementById('filePreview');\n        preview.innerHTML = uploadedFiles.map(f => `<span class=\"file-chip\">🖼️ ${f.name}</span>`).join('');\n    }\n\n    async function process() {\n        if (uploadedFiles.length === 0) return alert('Please select article screenshots first.');\n        \n        const btn = document.getElementById('btn');\n        const loader = document.getElementById('loader');\n        btn.disabled = true;\n        loader.style.display = 'block';\n        document.getElementById('results').innerHTML = '';\n        \n        const formData = new FormData();\n        for (const file of uploadedFiles) {\n            formData.append('file', file);\n        }\n        \n        try {\n            const response = await fetch(window.location.origin + '/webhook/batch-processor', {\n                method: 'POST',\n                body: formData\n            });\n    \n            if (!response.ok) throw new Error(`Server returned ${response.status}`);\n    \n            const responseText = await response.text();\n            const data = JSON.parse(responseText);\n            \n            // Map the AI text to our generatedPosts array\n            generatedPosts = data.posts; \n    \n            if (!generatedPosts || generatedPosts.length === 0) {\n                throw new Error(\"No posts were generated.\");\n            }\n    \n            let html = '';\n            generatedPosts.forEach((item, index) => {\n                const file = uploadedFiles[index];\n                const localImageUrl = file ? URL.createObjectURL(file) : '';\n                const postContent = typeof item.post === 'string' ? item.post : JSON.stringify(item.post);\n    \n                html += `\n                    <div class=\"post-card\" id=\"card-${index}\">\n                        <div class=\"post-header\">\n                            <span>STRATEGIC INSIGHT #${index + 1}</span>\n                            <span>${file ? file.name : 'ARTICLE'}</span>\n                        </div>\n                        <img class=\"post-image\" src=\"${localImageUrl}\" alt=\"Article Image\">\n                        <div class=\"post-body\" id=\"content-${index}\" contenteditable=\"true\">\n                            ${postContent.split('\\n').map(line => line.trim() ? `<p>${line}</p>` : '').join('')}\n                        </div>\n                        <div style=\"padding: 0 30px 30px;\">\n                            <button class=\"approve-btn\" id=\"btn-${index}\" onclick=\"approvePost(${index})\">🚀 Approve & Post to LinkedIn</button>\n                        </div>\n                    </div>\n                `;\n            });\n    \n            document.getElementById('results').innerHTML = html;\n    \n        } catch (e) {\n            console.error(\"Process Error:\", e);\n            alert('Generation Error: ' + e.message);\n        } finally {\n            btn.disabled = false;\n            loader.style.display = 'none';\n        }\n    }\n\n    async function approvePost(index) {\n        const card = document.getElementById(`card-${index}`);\n        const btn = document.getElementById(`btn-${index}`);\n        const editedText = document.getElementById(`content-${index}`).innerText;\n        const file = uploadedFiles[index]; // Get the original file\n\n        if (!confirm(\"Are you sure you want to approve and post this to LinkedIn?\")) return;\n\n        try {\n            btn.disabled = true;\n            btn.innerText = \"⌛ SENDING...\";\n\n            // CRITICAL FIX: Convert the local file to Base64 right here\n            const base64Image = await toBase64(file);\n\n            const response = await fetch(window.location.origin + '/webhook/approve-linkedin', {\n                method: 'POST',\n                headers: { 'Content-Type': 'application/json' },\n                body: JSON.stringify({\n                    postContent: editedText,\n                    image: base64Image,      // Now this is the actual image string!\n                    mime: file.type          // Now this is the actual mime type!\n                })\n            });\n\n            if (response.ok) {\n                card.classList.add('approved');\n                btn.innerText = \"✅ PUBLISHED\";\n                alert('Success! Post sent to LinkedIn.');\n            } else {\n                throw new Error('Server rejected approval');\n            }\n        } catch (e) {\n            btn.disabled = false;\n            btn.innerText = \"🚀 Approve & Post to LinkedIn\";\n            alert('Approval Failed: ' + e.message);\n        }\n    }\n</script>\n</body>\n</html>",
+        "options": {}
+      },
+      "id": "fbf9b2f2-694e-4e21-a5c5-8af885095da0",
+      "name": "Respond to Webhook (UI)",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -224,
+        -160
+      ]
+    },
+    {
+      "parameters": {
+        "path": "linkedin-generator",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "01b5dd98-1718-4a34-bf47-4337e1517a62",
+      "name": "Webhook (UI)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -448,
+        -160
+      ],
+      "webhookId": "INSERT YOUR WEBHOOK ID"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "8bfd42da-7737-4318-9c45-65ae1d115714",
+      "name": "Return JSON",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        816,
+        48
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. Safely grab the text from the previous Gemini/AI node\nconst rawText = $input.first().json.text || \"\";\n\n// If Gemini failed or sent nothing, return an empty array to prevent the frontend from crashing\nif (!rawText || rawText.trim() === \"\") {\n    return [{ json: { posts: [] } }];\n}\n\nlet posts = [];\n\ntry {\n    // 2. Attempt a clean parse (stripping markdown backticks)\n    const cleaned = rawText.replace(/```json/g, \"\").replace(/```/g, \"\").trim();\n    posts = JSON.parse(cleaned);\n} catch (e) {\n    // 3. Fallback: Manually find the JSON array [] using string indexing \n    // This avoids the 'Invalid regular expression' error entirely\n    const startIdx = rawText.indexOf('[');\n    const endIdx = rawText.lastIndexOf(']');\n    \n    if (startIdx !== -1 && endIdx !== -1 && endIdx > startIdx) {\n        const jsonString = rawText.substring(startIdx, endIdx + 1);\n        try {\n            posts = JSON.parse(jsonString);\n        } catch (innerError) {\n            console.error(\"Manual JSON extract failed:\", innerError);\n            posts = [];\n        }\n    }\n}\n\n// 4. Map the binary images (screenshots) to the parsed posts\n// This ensures Post #1 uses Image #1, etc.\nconst finalPosts = posts.map((p, index) => {\n    // Access binary data from the input item\n    const binaryKeys = Object.keys($input.first().binary || {});\n    const key = binaryKeys[index];\n    \n    return {\n        ...p,\n        // Passing the Base64 data and mimeType to the frontend\n        imageBase64: key ? $input.first().binary[key].data : null,\n        mimeType: key ? $input.first().binary[key].mimeType : null\n    };\n});\n\nreturn [{ json: { posts: finalPosts } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        608,
+        48
+      ],
+      "id": "890ddc40-93cd-4b04-8381-7b9e3524a6c3",
+      "name": "Parse Output"
+    },
+    {
+      "parameters": {
+        "jsCode": "const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));\n\nconst binaryKeys = Object.keys(items[0].binary);\nconst rawText = [];\nconst debugInfo = [];\n\nfor (let i = 0; i < binaryKeys.length; i++) {\n  const key = binaryKeys[i];\n  const binaryData = await this.helpers.getBinaryDataBuffer(0, key);\n  const base64 = binaryData.toString('base64');\n  const mimeType = items[0].binary[key].mimeType;\n\n  try {\n    const ocrResponse = await this.helpers.httpRequest({\n      method: 'POST',\n      url: 'https://api.ocr.space/parse/image',\n      headers: { 'apikey': 'INSERT API KEY HERE' },\n      timeout: 30000, // 30-second timeout per individual image\n      body: {\n        language: 'eng',\n        isOverlayRequired: 'false',\n        base64Image: `data:${mimeType};base64,${base64}`\n      },\n      form: true \n    });\n\n    const text = ocrResponse?.ParsedResults?.[0]?.ParsedText || '';\n    if (text.trim()) {\n      rawText.push(text.trim());\n    }\n    \n    debugInfo.push({ file: key, status: 'success', length: text.length });\n\n  } catch (err) {\n    debugInfo.push({ file: key, status: 'error', message: err.message });\n    // If one fails, we still want to try the others\n  }\n\n  // Mandatory gap to prevent OCR Space API from hanging up on multiple large uploads\n  await sleep(4000); \n}\n\nreturn [{\n  json: {\n    rawText,\n    debugInfo,\n    totalFiles: binaryKeys.length,\n    totalTexts: rawText.length\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -96,
+        48
+      ],
+      "id": "00ed77ba-3e81-4f7c-a966-105c6648c89d",
+      "name": "OCR"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "approve-linkedin",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "20567ef7-7960-4a37-a468-064c7bd26ef9",
+      "name": "Webhook Approval",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -448,
+        416
+      ],
+      "webhookId": "INSERT YOUR WEBHOOK ID"
+    },
+    {
+      "parameters": {
+        "url": "https://api.linkedin.com/v2/userinfo",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "linkedInOAuth2Api",
+        "options": {}
+      },
+      "id": "3108ace7-e452-45b6-a56d-b8453ca07684",
+      "name": "Get LinkedIn ID",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        -176,
+        416
+      ],
+      "credentials": {
+        "linkedInOAuth2Api": {
+          "id": "INSERT YOUR CREDENTIAL ID",
+          "name": "LinkedIn account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.linkedin.com/rest/images?action=initializeUpload",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "linkedInOAuth2Api",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "LinkedIn-Version",
+              "value": "202604"
+            },
+            {
+              "name": "X-Restli-Protocol-Version",
+              "value": "2.0.0"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "initializeUploadRequest",
+              "value": "={{ { \"owner\": \"urn:li:person:\" + $node[\"Get LinkedIn ID\"].json.sub } }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "dca06c69-a3bb-403a-bdde-4c50d8a332cf",
+      "name": "Register Media Upload",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        64,
+        416
+      ],
+      "credentials": {
+        "linkedInOAuth2Api": {
+          "id": "INSERT YOUR CREDENTIAL ID",
+          "name": "LinkedIn account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. Grab the image from our cleanly named Webhook node\nconst webhookData = $('Webhook Approval').first();\nconst base64String = webhookData.json.body.image;\nconst cleanBase64 = base64String.replace(/^data:image\\/\\w+;base64,/, \"\");\nconst mimeType = webhookData.json.body.mime || 'image/jpeg';\n\n// 2. Keep the URL data from the node right before this one\nconst incomingJson = $input.first().json;\n\n// 3. Package it for the upload node\nreturn [{\n    json: incomingJson,\n    binary: {\n        data: {\n            data: cleanBase64,\n            mimeType: mimeType,\n            fileName: 'insight.jpg'\n        }\n    }\n}];"
+      },
+      "id": "71739499-b108-4410-b239-c5ae41e39681",
+      "name": "Base64 to Binary",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        304,
+        416
+      ]
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "={{ $node[\"Register Media Upload\"].json.value.uploadUrl }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "linkedInOAuth2Api",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/octet-stream"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "data",
+        "options": {}
+      },
+      "id": "c8017a10-b405-49df-90f9-130841f08e22",
+      "name": "Upload Image Binary",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        528,
+        416
+      ],
+      "credentials": {
+        "linkedInOAuth2Api": {
+          "id": "INSERT YO CREDENTIAL ID",
+          "name": "LinkedIn account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.linkedin.com/rest/posts",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "linkedInOAuth2Api",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "LinkedIn-Version",
+              "value": "202604"
+            },
+            {
+              "name": "X-Restli-Protocol-Version",
+              "value": "2.0.0"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "author",
+              "value": "={{ 'urn:li:person:' + $node['Get LinkedIn ID'].json.sub }}"
+            },
+            {
+              "name": "commentary",
+              "value": "={{ $node['Webhook Approval'].json.body.postContent }}"
+            },
+            {
+              "name": "visibility",
+              "value": "PUBLIC"
+            },
+            {
+              "name": "distribution",
+              "value": "={{ { \"feedDistribution\": \"MAIN_FEED\" } }}"
+            },
+            {
+              "name": "lifecycleState",
+              "value": "PUBLISHED"
+            },
+            {
+              "name": "content",
+              "value": "={{ { \"media\": { \"id\": $node['Register Media Upload'].json.value.image } } }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "63a93257-d004-4fb9-a333-862ccfa6b792",
+      "name": "Publish LinkedIn Post",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        752,
+        416
+      ],
+      "credentials": {
+        "linkedInOAuth2Api": {
+          "id": "lYM8lEFPqA0sw1ob",
+          "name": "LinkedIn account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "c2413517-d47c-446c-9f9f-678061813040",
+      "name": "Respond Success",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        976,
+        416
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook (Process)": {
+      "main": [
+        [
+          {
+            "node": "OCR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Parse Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook (UI)": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook (UI)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Output": {
+      "main": [
+        [
+          {
+            "node": "Return JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OCR": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook Approval": {
+      "main": [
+        [
+          {
+            "node": "Get LinkedIn ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get LinkedIn ID": {
+      "main": [
+        [
+          {
+            "node": "Register Media Upload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Register Media Upload": {
+      "main": [
+        [
+          {
+            "node": "Base64 to Binary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Base64 to Binary": {
+      "main": [
+        [
+          {
+            "node": "Upload Image Binary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload Image Binary": {
+      "main": [
+        [
+          {
+            "node": "Publish LinkedIn Post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Publish LinkedIn Post": {
+      "main": [
+        [
+          {
+            "node": "Respond Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "INSERT YO INSTANCE ID"
+  }
+}
